@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const contacontrollers =   require('../controllers/conta.controllers');
-// Retrieve all employees
-router.get('/', contacontrollers.findAll);
-// Create a new employee
-router.post('/', contacontrollers.create);
-// Retrieve a single employee with id
-router.get('/:id', contacontrollers.findById);
-// Update a employee with id
-router.put('/:id', contacontrollers.update);
-// Delete a employee with id
-router.delete('/:id', contacontrollers.delete);
+const contacontroles = require('../controles/conta.controle');
+
+router.get('/', contacontroles.findAll);
+
+router.post('/', contacontroles.create);
+
+router.get('/:id', contacontroles.findById);
+
+router.put('/:id', contacontroles.update);
+
+router.delete('/:id', contacontroles.delete);
 module.exports = router
