@@ -5,74 +5,57 @@ var movimentacao = function (movimentacao) {
   this.valor_transacao = movimentacao.valor_transacao;
   this.tipo_transacao = movimentacao.tipo_transacao;
   this.id_conta = movimentacao.id_conta;
+  this.data_transacao = movimentacao.data_transacao;
 
 };
 movimentacao.create = function (newEmp, result) {
   dbConn.query("INSERT INTO movimentacao set ?", newEmp, function (err, res) {
     if (err) {
-      console.log("erro: ", err);
       result(err, null);
     }
     else {
-      console.log(res.insertId);
       result(null, res.insertId);
     }
   });
 };
-movimentacao.findById = function (id, result) {
-  dbConn.query("Select * from movimentacao where id = ? ", id, function (err, res) {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-    }
-    else {
-      result(null, res);
-    }
-  });
-};
+
 movimentacao.findAll = function (result) {
   dbConn.query("Select * from movimentacao", function (err, res) {
     if (err) {
-      console.log("erro: ", err);
       result(null, err);
     }
     else {
-      console.log('movimentacao : ', res);
       result(null, res);
     }
   });
 };
 movimentacao.buscarSaldo = function (idConta, result) {
-  dbConn.query("SELECT contas.nome, ((SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=1) - (SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=2)) as saldo FROM contas WHERE contas.id_conta="+idConta, function (err, res) {
+  dbConn.query("SELECT contas.nome, ((SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=1) - (SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=2)) as saldo FROM contas WHERE contas.id_conta=" + idConta, function (err, res) {
     if (err) {
-      console.log("erro: ", err);
       result(null, err);
     }
     else {
-      console.log('movimentacao : ', res);
       result(null, res);
     }
   });
 };
-movimentacao.update = function (id, movimentacao, result) {
-  dbConn.query("UPDATE movimentacao SET id_movimentacao=?,valor_transacao=?,tipo_transacao=?,id_conta=?", [movimentacao.id_movimentacao, movimentacao.valor_transacao, movimentacao.tipo_transacao, movimentacao.id_conta], function (err, res) {
+movimentacao.extrato = function (idConta, result) {
+  dbConn.query("SELECT *FROM movimentacao WHERE movimentacao.id_conta = " + idConta + " ORDER BY data_transacao asc", function (err, res) {
     if (err) {
-      console.log("erro: ", err);
       result(null, err);
     } else {
+      let saldoAtual = 0;
+      for (let x = 0; x < res.length; x++) {
+        if (res[x].tipo_transacao == 1) {
+          saldoAtual += res[x].valor_transacao;
+        } else {
+          saldoAtual -= res[x].valor_transacao;
+        }
+        res[x].saldoAtual = saldoAtual;
+      }
       result(null, res);
     }
   });
 };
-movimentacao.delete = function (id, result) {
-  dbConn.query("DELETE FROM movimentacao WHERE id = ?", [id], function (err, res) {
-    if (err) {
-      console.log("erro: ", err);
-      result(null, err);
-    }
-    else {
-      result(null, res);
-    }
-  });
-};
+
 module.exports = movimentacao;
