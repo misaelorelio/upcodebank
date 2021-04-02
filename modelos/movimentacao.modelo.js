@@ -42,6 +42,18 @@ movimentacao.findAll = function (result) {
     }
   });
 };
+movimentacao.buscarSaldo = function (idConta, result) {
+  dbConn.query("SELECT contas.nome, ((SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=1) - (SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=2)) as saldo FROM contas WHERE contas.id_conta="+idConta, function (err, res) {
+    if (err) {
+      console.log("erro: ", err);
+      result(null, err);
+    }
+    else {
+      console.log('movimentacao : ', res);
+      result(null, res);
+    }
+  });
+};
 movimentacao.update = function (id, movimentacao, result) {
   dbConn.query("UPDATE movimentacao SET id_movimentacao=?,valor_transacao=?,tipo_transacao=?,id_conta=?", [movimentacao.id_movimentacao, movimentacao.valor_transacao, movimentacao.tipo_transacao, movimentacao.id_conta], function (err, res) {
     if (err) {
