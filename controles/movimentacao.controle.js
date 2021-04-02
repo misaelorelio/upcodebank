@@ -1,5 +1,6 @@
 'use strict';
 const movimentacao = require('../modelos/movimentacao.modelo');
+
 exports.findAll = function (req, res) {
     movimentacao.findAll(function (err, movimentacao) {
         if (err)
@@ -7,6 +8,7 @@ exports.findAll = function (req, res) {
         res.send(movimentacao);
     });
 };
+
 exports.create = function (req, res) {
 
 

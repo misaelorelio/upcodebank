@@ -29,6 +29,7 @@ movimentacao.findAll = function (result) {
     }
   });
 };
+
 movimentacao.buscarSaldo = function (idConta, result) {
   dbConn.query("SELECT contas.nome, ((SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=1) - (SELECT sum(movimentacao.valor_transacao) from movimentacao WHERE movimentacao.id_conta=contas.id_conta AND movimentacao.tipo_transacao=2)) as saldo FROM contas WHERE contas.id_conta=" + idConta, function (err, res) {
     if (err) {

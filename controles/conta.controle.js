@@ -1,6 +1,7 @@
 'use strict';
 const contas = require('../modelos/conta.modelo');
 const moment = require('moment');
+
 exports.findAll = function (req, res) {
   contas.findAll(function (err, contas) {
     if (err)
@@ -15,12 +16,11 @@ exports.create = function (req, res) {
   const past = moment(req.body.data_nascimento);
   const duration = moment.duration(now.diff(past));
 
-  const days = duration.asDays();
-  const ano = duration.asYears();
+  const idade = duration.asYears();
 
   if (req.body.cpf != undefined && req.body.data_nascimento != undefined && req.body.nome != undefined && req.body.data_cadastro != undefined && req.body.data_nascimento != "" && req.body.nome != "" && req.body.cpf != "" && req.body.data_cadastro != "") {
 
-    if (ano < 18) {
+    if (idade < 18) {
       res.status(400).send({ error: true, message: 'Não é possível incluir uma conta bancária para clientes de menor idade' });
     } else {
       const new_contas = new contas(req.body);

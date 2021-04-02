@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const movimentacaocontroles = require('../controles/movimentacao.controle');
+const movimentacaoControles = require('../controles/movimentacao.controle');
 
-router.get('/listar', movimentacaocontroles.findAll);
+router.get('/listar', movimentacaoControles.findAll);
 
-router.post('/inserir', movimentacaocontroles.create);
+router.post('/inserir', movimentacaoControles.create);
 
-router.get('/saldo/:id', movimentacaocontroles.buscarSaldo);
+router.get('/saldo/:id', movimentacaoControles.buscarSaldo);
 
-router.get('/extrato/:id', movimentacaocontroles.extrato);
+router.get('/extrato/:id', movimentacaoControles.extrato);
 
 module.exports = router
