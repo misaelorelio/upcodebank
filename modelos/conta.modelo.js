@@ -64,4 +64,5 @@ contas.delete = function (id, result) {
     }
   });
 };
+
 module.exports = contas;
